@@ -1,0 +1,16 @@
+Mon Dec 30 13:44:31 2024  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.0.0 - removed from core Bedrock]:
+	* sqlite.xml: moved from Bedrock
+	* lib/BLM/Startup/SQLiteSession.pm: likewise
+	* create-session-table.sql: new
+	* ChangeLog: new
+	* requires: new
+	* test-requires: new
+	* resources: new
+	* extra-files: new
+	* buildspec.yml: new
+	* Makefile: new
+	* t/00-sqlite.t: new
+	* t/01-sqlite.t: new
+

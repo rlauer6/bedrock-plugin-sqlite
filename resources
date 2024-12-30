@@ -1,0 +1,12 @@
+{
+   "repository" : {
+      "web" : "http://github.com/rlauer6/bedrock-plugin.sqlite",
+      "url" : "git://github.com/rlauer6/bedrock-plugin-sqlite.git",
+      "type" : "git"
+   },
+   "homepage" : "http://github.com/rlauer6/bedrock-plugin-sqlite.git",
+   "bugtracker" : {
+      "web" : "http://github.com/rlauer6/bedrock-plugin-sqlite/issues",
+      "mailto" : "rlauer6@comcast.net"
+   }
+}

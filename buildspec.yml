@@ -1,0 +1,28 @@
+project:
+  description: BLM::Startup::SQLiteSession
+  author:
+    name: Rob Lauer
+    mailto: rlauer6@comcast.net
+pm_module: BLM::Startup::SQLiteSession
+min-perl-version: 5.010
+dependencies:
+  requires: requires
+  test_requires: test-requires
+path:
+  pm_module: lib
+  tests: t
+extra-files:
+  - ChangeLog
+  - share:
+      - sqlite.xml
+provides:
+  - BLM::Startup::SQLiteSession
+resources:
+  homepage: http://github.com/rlauer6/bedrock-plugin-sqlite.git
+  bugtracker:
+    web: http://github.com/rlauer6/bedrock-plugin-sqlite/issues
+    mailto: rlauer6@comcast.net
+  repository:
+    url: git://github.com/rlauer6/bedrock-plugin-sqlite.git
+    web: http://github.com/rlauer6/bedrock-plugin.sqlite
+    type: 'git'
