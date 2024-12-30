@@ -2,3 +2,5 @@ POSIX
 Bedrock
 Digest::SHA
 DBI
+Pod::Usage
+File::ShareDir

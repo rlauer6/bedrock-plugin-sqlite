@@ -1,2 +1,3 @@
 ChangeLog /ChangeLog
 sqlite.xml share/sqlite.xml
+create-session-table.sql share/create-session-table.sql

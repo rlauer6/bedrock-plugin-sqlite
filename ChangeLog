@@ -1,3 +1,16 @@
+Mon Dec 30 16:34:46 2024  Rob Lauer  <rlauer6@comcast.net>
+
+	[1.0.1]:
+	* bin/create-session-table.sql: new
+	* buildspec.yml: add above to build
+	* create-session-tables.sql
+	- only create if not exists
+	- unique constraint on username
+	* extra-files: add sqlite.xml
+	* lib/BLM/Startup/SQLiteSession.pm
+	(encrypt): replaced with create_encrypt_function() which can be imported
+	* requires: +Pod::Usage, File::ShareDir
+
 Mon Dec 30 13:44:31 2024  Rob Lauer  <rlauer6@comcast.net>
 
 	[1.0.0 - removed from core Bedrock]:

@@ -3,7 +3,6 @@ package BLM::Startup::SQLiteSession;
 #
 #    This file is a part of Bedrock, a server-side web scripting tool.
 #    Check out http://www.openbedrock.net
-#    Copyright (C) 2001, Charles Jones, LLC.
 #    Copyright (C) 2024, TBC Development Group, LLC.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -30,20 +29,32 @@ use Digest::SHA qw(sha256_hex);
 
 use BLM::Startup::SQLSession qw($DUPLICATE_USERNAME $USERNAME_NOT_FOUND $BAD_LOGIN);
 
-use parent qw( BLM::Startup::SQLSession );
+use parent qw( Exporter BLM::Startup::SQLSession );
 
-our $VERSION = '1.0.0';
+our @EXPORT_OK = qw(create_encrypt_function);
+
+our $VERSION = '1.0.1';
 
 ########################################################################
-sub encrypt {
+sub create_encrypt_function {
 ########################################################################
-  my ( $password, $salt ) = @_;
+  my ($dbi) = @_;
 
-  $salt //= join q{}, ( '0' .. '9', 'a' .. 'f' )[ map { int rand 16 } ( 0 .. 7 ) ];
+  $dbi->sqlite_create_function(
+    'encrypt',
+    -1,
+    sub {
+      my ( $password, $salt ) = @_;
 
-  my $encrypted_password = $salt . sha256_hex( $salt . $password );
+      $salt //= join q{}, ( '0' .. '9', 'a' .. 'f' )[ map { int rand 16 } ( 0 .. 7 ) ];
 
-  return $encrypted_password;
+      my $encrypted_password = $salt . sha256_hex( $salt . $password );
+
+      return $encrypted_password;
+    }
+  );
+
+  return;
 }
 
 ########################################################################
@@ -55,15 +66,7 @@ sub CONNECT {
 
   $self->SUPER::CONNECT(%args);
 
-  $self->{dbh}->sqlite_create_function(
-    'encrypt',
-    -1,
-    sub {
-      my ( $pw, $salt ) = @_;
-
-      return encrypt( $pw, $salt );
-    }
-  );
+  create_encrypt_function( $self->{dbh} );
 
   return;
 }
@@ -302,11 +305,32 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
       UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
     END;
 
+I<Note: You can also use the included C<create-session-table.pl> script.>
+
 =item Restart Apache
 
 =item Test your session
 
+=over 10
+
+=item An anonymous session...
+
   <pre><trace --output $session></pre>
+
+=item Register a user...
+
+  <null $session.register('fflintstone', 'P3881e$', 'Fred', 'Flintstone', 'fflintstone@openbedrock.org')>
+
+=item Login a user...
+
+ <null $session.login($input.username, $input.password)>
+
+=item Persist some data to your session...
+
+ <null $session.set('foo', 'bar')>
+ <null $session.set('input', $input)>
+
+=back
 
 =back
 
@@ -317,5 +341,9 @@ Class to provide the implementation for a SQLite based session manager.
 =head1 SEE ALSO
 
 L<BLM::Startup::SessionManager>
+
+=head1 AUTHOR
+
+Rob Lauer - <bigfoot@cpan.org>
 
 =cut

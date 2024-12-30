@@ -1,9 +1,9 @@
- CREATE TABLE session
+ CREATE TABLE IF NOT EXISTS session
   (
    id           integer primary key autoincrement not null,
    session      varchar(50)  not null default '',
    login_cookie varchar(50)  not null default '',
-   username     varchar(50)  not null default '',
+   username     varchar(50)  unique not null default '',
    password     varchar(30)  default null,
    firstname    varchar(30)  default null,
    lastname     varchar(50)  default null,
@@ -14,7 +14,7 @@
    expires      datetime     default null
  );
 
- CREATE TRIGGER session_updates AFTER UPDATE ON session
+ CREATE TRIGGER IF NOT EXISTS session_updates AFTER UPDATE ON session
    BEGIN
      UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
    END;

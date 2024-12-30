@@ -53,10 +53,26 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
              UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
            END;
 
+    _Note: You can also use the included `create-session-table.pl` script._
+
 - Restart Apache
 - Test your session
+    - An anonymous session...
 
-        <pre><trace --output $session></pre>
+            <pre><trace --output $session></pre>
+
+    - Register a user...
+
+            <null $session.register('fflintstone', 'P3881e$', 'Fred', 'Flintstone', 'fflintstone@openbedrock.org')>
+
+    - Login a user...
+
+            <null $session.login($input.username, $input.password)>
+
+    - Persist some data to your session...
+
+            <null $session.set('foo', 'bar')>
+            <null $session.set('input', $input)>
 
 # DESCRIPTION
 
@@ -65,3 +81,7 @@ Class to provide the implementation for a SQLite based session manager.
 # SEE ALSO
 
 [BLM::Startup::SessionManager](https://metacpan.org/pod/BLM%3A%3AStartup%3A%3ASessionManager)
+
+# AUTHOR
+
+Rob Lauer - <bigfoot@cpan.org>
