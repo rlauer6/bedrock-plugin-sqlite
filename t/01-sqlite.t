@@ -48,7 +48,7 @@ use Test::More;
 
 use Bedrock qw(slurp_file);
 
-use Apache::Bedrock qw(bind_module);
+use Bedrock::Handler qw(bind_module);
 use Bedrock::BedrockConfig;
 use Bedrock::Constants qw(:defaults :chars :booleans);
 use Bedrock::XML;

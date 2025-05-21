@@ -3,7 +3,7 @@
   <scalar name="session">yes</scalar>
   <scalar name="module">BLM::Startup::SQLiteSession</scalar>
   <object name="config">
-    <scalar name="data_source">dbi:SQLite:dbname=/tmp/bedrock.db</scalar>
+    <scalar name="data_source">dbi:SQLite:dbname=/var/lib/bedrock/bedrock.db</scalar>
     <scalar name="table_name">session</scalar>
     <scalar name="verbose">2</scalar>
     <scalar name="param">session</scalar>

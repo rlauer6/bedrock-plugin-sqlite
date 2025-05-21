@@ -3,7 +3,7 @@
    id           integer primary key autoincrement not null,
    session      varchar(50)  not null default '',
    login_cookie varchar(50)  not null default '',
-   username     varchar(50)  unique not null default '',
+   username     varchar(50)  not null default '',
    password     varchar(30)  default null,
    firstname    varchar(30)  default null,
    lastname     varchar(50)  default null,

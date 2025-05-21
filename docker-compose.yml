@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  web:
+    read_only: false
+    build:
+      context: ${PWD}
+      dockerfile: ${PWD}/${DOCKERFILE}
+    image: "${DOCKERIMAGE}"
+    tty: true
+    stdin_open: true
+    ports:
+      - '80:80'
+    expose:
+      - 80
+    volumes:
+      - ./sqlite.xml:/var/www/bedrock/config.d/startup/sqlite.xml
+      - ./register.roc:/var/www/html/register.roc
+      - ./temp-login.roc:/var/www/html/temp-login.roc
+      - ./mail.roc:/var/www/html/mail.roc
+      - ./session.roc:/var/www/html/session.roc
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge

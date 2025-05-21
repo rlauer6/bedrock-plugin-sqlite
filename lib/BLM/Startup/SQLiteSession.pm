@@ -3,7 +3,7 @@ package BLM::Startup::SQLiteSession;
 #
 #    This file is a part of Bedrock, a server-side web scripting tool.
 #    Check out http://www.openbedrock.net
-#    Copyright (C) 2024, TBC Development Group, LLC.
+#    Copyright (C) 2025, TBC Development Group, LLC.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,17 +23,16 @@ package BLM::Startup::SQLiteSession;
 use strict;
 use warnings;
 
-use POSIX qw(strftime);
+use BLM::Startup::SQLSession qw($DUPLICATE_USERNAME $USERNAME_NOT_FOUND $BAD_LOGIN);
 use Data::Dumper;
 use Digest::SHA qw(sha256_hex);
-
-use BLM::Startup::SQLSession qw($DUPLICATE_USERNAME $USERNAME_NOT_FOUND $BAD_LOGIN);
+use POSIX qw(strftime);
 
 use parent qw( Exporter BLM::Startup::SQLSession );
 
 our @EXPORT_OK = qw(create_encrypt_function);
 
-our $VERSION = '1.0.1';
+our $VERSION = '1.0.2';
 
 ########################################################################
 sub create_encrypt_function {
@@ -154,7 +153,7 @@ sub LOGIN {
   },
   LOOKUP_USER => {
     sql => q{
-      select username
+      select *
       from %s
       where username = ?
     },
@@ -248,7 +247,7 @@ __END__
 
 =pod
 
-=head1 NAME
+=head1 PUBLIC
 
 BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
 
@@ -256,7 +255,7 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
 
 =over 5
 
-=item Add a configuration object in Bedrock's startup configuration path:
+=item 1. Add a configuration object in Bedrock's startup configuration path (typically F</var/www/bedrock/config.d/startup>):
 
  <object>
    <scalar name="binding">session</scalar>
@@ -278,11 +277,11 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
    </object>
  </object>
 
-=item Create a SQLite database
+=item 2. Create a SQLite database
 
- sqlite3 /tmp/bedrock.db
+  sqlite3 /tmp/bedrock.db
 
-=item Create a session table
+=item 3. Create a session table
 
  CREATE TABLE session
   (
@@ -307,9 +306,9 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
 
 I<Note: You can also use the included C<create-session-table.pl> script.>
 
-=item Restart Apache
+=item 4. Restart Apache
 
-=item Test your session
+=item 5. Test your session
 
 =over 10
 
@@ -337,6 +336,13 @@ I<Note: You can also use the included C<create-session-table.pl> script.>
 =head1 DESCRIPTION
 
 Class to provide the implementation for a SQLite based session manager.
+
+Generally speaking, a SQLite based session manager is probably not
+appropriate for a production environment, however when doing local
+development, a SQLite session manager works well. You can start doing
+local development with session management included by just installing
+this plugin and following the steps in the L</SYNOPSIS>. No need to
+rely on a database server to provide session manager.
 
 =head1 SEE ALSO
 

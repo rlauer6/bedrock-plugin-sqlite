@@ -131,15 +131,15 @@ __END__
 
 =pod
 
-=head1 SYNOPSIS
+=head1 USAGE
 
  create-session-table.pl --database database-name [--user user --password password --help]
 
 Creates a session table for storing persistent Bedrock sessions.
-Optionally creates a login user. If you want to create or update a user, --user
-and --password are required arguments.
+Optionally creates a login user. If you want to create or update a user, C<--user>
+and C<--password> are required arguments.
 
-=head1 OPTIONS
+=head2 Options
 
  --database, -d       database name (required)
  --user, -u           user to create
@@ -148,3 +148,12 @@ and --password are required arguments.
  --email, -e          user's email
  --password, -p       password
  --help, -h           this
+
+=head2 Example
+
+ sudo mkdir -p /var/lib/bedrock
+ sudo create-session-table.pl -d /var/lib/bedrock/bedrock.db
+ sudo chown www-data:www-data /var/lib/bedrock
+
+
+=cut
