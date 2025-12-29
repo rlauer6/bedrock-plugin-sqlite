@@ -4,14 +4,15 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
 
 # SYNOPSIS
 
-- 1. Add a configuration object in Bedrock's startup configuration path (typically `/var/www/bedrock/config.d/startup`):
+- 1. Add a configuration object in Bedrock's startup configuration
+path (typically `/var/www/bedrock/config.d/startup`):
 
         <object>
           <scalar name="binding">session</scalar>
           <scalar name="session">yes</scalar>
           <scalar name="module">BLM::Startup::SQLiteSession</scalar>
           <object name="config">
-            <scalar name="data_source">dbi:SQLite:dbname=/tmp/bedrock.db</scalar>
+            <scalar name="data_source">dbi:SQLite:dbname=/var/lib/bedrock/bedrock.db</scalar>
             <scalar name="table_name">session</scalar>
             <scalar name="verbose">2</scalar>
             <scalar name="param">session</scalar>
@@ -53,7 +54,9 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
              UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
            END;
 
-    _Note: You can also use the included `create-session-table.pl` script._
+    _Note: You can also use the included `bedrock-sqlite.pl` script._
+
+        bedrock-sqlite.pl -d /var/lib/bedrock/bedrock.db -o www-data create
 
 - 4. Restart Apache
 - 5. Test your session

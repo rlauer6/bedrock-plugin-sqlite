@@ -32,7 +32,7 @@ use parent qw( Exporter BLM::Startup::SQLSession );
 
 our @EXPORT_OK = qw(create_encrypt_function);
 
-our $VERSION = '1.0.2';
+our $VERSION = '@PACKAGE_VERSION@';
 
 ########################################################################
 sub create_encrypt_function {
@@ -255,14 +255,15 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
 
 =over 5
 
-=item 1. Add a configuration object in Bedrock's startup configuration path (typically F</var/www/bedrock/config.d/startup>):
+=item 1. Add a configuration object in Bedrock's startup configuration
+path (typically F</var/www/bedrock/config.d/startup>):
 
  <object>
    <scalar name="binding">session</scalar>
    <scalar name="session">yes</scalar>
    <scalar name="module">BLM::Startup::SQLiteSession</scalar>
    <object name="config">
-     <scalar name="data_source">dbi:SQLite:dbname=/tmp/bedrock.db</scalar>
+     <scalar name="data_source">dbi:SQLite:dbname=/var/lib/bedrock/bedrock.db</scalar>
      <scalar name="table_name">session</scalar>
      <scalar name="verbose">2</scalar>
      <scalar name="param">session</scalar>
@@ -304,7 +305,9 @@ BLM::Startup::SQLiteSession - Bedrock sessions using SQLite
       UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
     END;
 
-I<Note: You can also use the included C<create-session-table.pl> script.>
+I<Note: You can also use the included C<bedrock-sqlite.pl> script.>
+
+ bedrock-sqlite.pl -d /var/lib/bedrock/bedrock.db -o www-data create
 
 =item 4. Restart Apache
 

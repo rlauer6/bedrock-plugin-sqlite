@@ -1,3 +1,24 @@
+Mon Dec 29 10:55:28 2025  Rob Lauer  <rclauer@gmail.com>
+
+	[1.0.3]:
+	* VERSION: new
+	* version.mk: new
+	* Makefile
+	- add above
+	- SHELL
+	- pattern rule for .pm.in
+	* .gitignore: + *.tmp
+	* README.md: generated
+	* requires: CLI::Simple
+	* bin/bedrock-sqlite.pl
+	- renamed from bin/create-session-table.pl
+	- refactored to use CLI::Simple
+	- dump
+	* Dockerfile
+	- refactored
+	- multistage build
+	* README-DOCKER.md: new
+
 Wed May 21 15:42:18 2025  Rob Lauer  <rlauer6@comcast.net>
 
 	[1.0.2]:

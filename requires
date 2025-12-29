@@ -1,5 +1,6 @@
 POSIX
 Bedrock
+CLI::Simple
 Digest::SHA
 DBI
 Pod::Usage
