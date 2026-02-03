@@ -3,7 +3,7 @@ package BLM::Startup::SQLiteSession;
 #
 #    This file is a part of Bedrock, a server-side web scripting tool.
 #    Check out http://www.openbedrock.net
-#    Copyright (C) 2025, TBC Development Group, LLC.
+#    Copyright (C) 2026, TBC Development Group, LLC.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@ use BLM::Startup::SQLSession qw($DUPLICATE_USERNAME $USERNAME_NOT_FOUND $BAD_LOG
 use Data::Dumper;
 use Digest::SHA qw(sha256_hex);
 use POSIX qw(strftime);
+
+use Role::Tiny::With;
+with 'Bedrock::Logger';
 
 use parent qw( Exporter BLM::Startup::SQLSession );
 
@@ -79,22 +82,12 @@ sub LOGIN {
 
   my $aref = $self->do_select( 'LOGIN', %options );
 
-  #  print {*STDERR} Dumper( [ aref => $aref ] );
-
   die sprintf $BAD_LOGIN, $options{username}
     if !defined $aref;
 
   my $encrypted_password  = $aref->[5];
   my ($salt)              = substr $encrypted_password, 0, 8;
   my $calculated_password = $salt . sha256_hex( $salt . $options{password} );
-
-  #  print {*STDERR} Dumper(
-  #    [ salt                => $salt,
-  #      encrypted_password  => $encrypted_password,
-  #      calculated_password => $calculated_password,
-  #      password            => $options{password},
-  #    ]
-  #  );
 
   die sprintf $BAD_LOGIN, $options{username}
     if $calculated_password ne $encrypted_password;
@@ -300,10 +293,20 @@ path (typically F</var/www/bedrock/config.d/startup>):
    expires      datetime     default null
  );
 
-  CREATE TRIGGER session_updates AFTER UPDATE ON session
-    BEGIN
-      UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
-    END;
+ CREATE TRIGGER session_updates AFTER UPDATE ON session
+   BEGIN
+     UPDATE session SET updated=CURRENT_TIMESTAMP where rowid=new.rowid;
+   END;
+
+ CREATE VIEW IF NOT EXISTS v_active_sessions AS
+   SELECT id, session, username, expires
+     FROM session
+     WHERE expires > time() AND username <> '';
+ 
+ CREATE VIEW IF NOT EXISTS v_expired_sesssion AS
+   SELECT id, session, username, expires
+     FROM session
+     WHERE expires < time();
 
 I<Note: You can also use the included C<bedrock-sqlite.pl> script.>
 

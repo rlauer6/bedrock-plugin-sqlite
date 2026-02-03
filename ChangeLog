@@ -1,3 +1,19 @@
+Tue Feb  3 16:37:42 2026  Rob Lauer  <rclauer@gmail.com>
+
+	[1.0.4]:
+	* VERSION: bump
+	* bin/bedrock-sqlite.pl
+	- minor formatting changes
+	- pod tweak
+	(main)
+	- add aliases dump, create, add
+	* create-session-table.sql
+	- added convenience views
+	* lib/BLM/Startup/SQLiteSession.pm.in
+	- pod add mention of new convenience views
+	- add Bedrock::Logger role
+	(LOGIN): remove comments
+
 Mon Dec 29 10:55:28 2025  Rob Lauer  <rclauer@gmail.com>
 
 	[1.0.3]:

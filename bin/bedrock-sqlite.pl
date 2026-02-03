@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+
 # Utility for use with BLM::Startup::SQLiteSession
 
 package Bedrock::SQLite::Session;
@@ -69,7 +70,7 @@ sub cmd_create_database {
     return $sql;
   };
 
-  croak "ERROR: could not read create-session-table.sql\n$EVAL_ERROR"
+  croak "ERROR: Could not read create-session-table.sql\n$EVAL_ERROR"
     if !$sql;
 
   eval {
@@ -103,7 +104,7 @@ sub cmd_dump {
   my $dbi = $self->_connect;
 
   my $sql = <<'END_OF_SQL';
-select * from session
+SELECT * FROM session
 END_OF_SQL
   my $result = $dbi->selectall_arrayref($sql);
 
@@ -128,8 +129,10 @@ sub cmd_create_user {
     if !$user || !$password;
 
   my $sql = <<'END_OF_SQL';
-insert into session 
- (username, password, firstname, lastname, email) values ( ?, encrypt(?), ?, ?, ? )
+INSERT INTO session 
+(username, password, firstname, lastname, email)
+  VALUES
+( ?, encrypt(?), ?, ?, ? )
 END_OF_SQL
 
   my @bind_args = ( $user, $password, $self->get_firstname, $self->get_lastname, $self->get_email );
@@ -142,13 +145,13 @@ END_OF_SQL
       if any { !defined $_ } ( $user, $password, $self->get_firstname, $self->get_lastname, $self->get_email );
 
     my $update_sql = <<'END_OF_SQL';
-update session 
-  set username = ?,
+UPDATE session 
+  SET username = ?,
       password = encrypt(?),
       firstname = ?,
       lastname = ?,
       email = ?
-  where username = ?
+  WHERE username = ?
 END_OF_SQL
 
     my $sth = $dbi->prepare($update_sql);
@@ -165,12 +168,12 @@ sub init {
 
   my $path = dist_dir('BLM-Startup-SQLiteSession');
 
-  croak 'unable to find distribution path'
+  croak 'ERROR: Unable to find distribution path'
     if !$path;
 
   $self->set_dist_dir($path);
 
-  croak 'database is a required argument'
+  croak 'ERROR: --database is a required argument'
     if !$self->get_database;
 
   return;
@@ -196,6 +199,13 @@ sub main {
     create  => \&cmd_create_database,
     user    => \&cmd_create_user,
     dump    => \&cmd_dump,
+    alias   => {
+      commands => {
+        'dump-session'   => 'dump',
+        'create-session' => 'create',
+        'add-user'       => 'add',
+      }
+    },
   );
 
   my $cli = Bedrock::SQLite::Session->new(
@@ -240,6 +250,7 @@ and C<--password> are required arguments.
 
  bedrock-sqlite -d /var/lib/bedrock/bedrock.db create
 
- bedrock-sqlite -d /var/lib/bedrock/bedrock.db -u fred -p 'Bedr0ck!' -e 'fflintstone@openbedrock.org' user
+bedrock-sqlite -d /var/lib/bedrock/bedrock.db -u fred -p 'Bedr0ck!' \
+  -e 'fflintstone@openbedrock.org' add-user
 
 =cut
